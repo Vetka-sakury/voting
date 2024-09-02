@@ -12,19 +12,20 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 //todo index
-@Table(name = "dish", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "date_time"}, name = "meal_unique_user_datetime_idx")})
+@Table(name = "dish")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Dish extends AbstractNamedEntity{
+public class Dish extends AbstractNamedEntity {
 
     @Column(name = "created", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
     @NotNull
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalDateTime created;
+    private Date created;
 
     @Column(name = "price", nullable = false)
     private double price;

@@ -16,11 +16,11 @@ import java.util.List;
 
 @Entity
 //todo index
-@Table(name = "restaurant", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "date_time"}, name = "meal_unique_user_datetime_idx")})
+@Table(name = "restaurant")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Restaurant extends  AbstractNamedEntity{
+public class Restaurant extends AbstractNamedEntity {
 
     @Column(name = "created", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
     @NotNull

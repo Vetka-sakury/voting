@@ -4,7 +4,6 @@ import com.example.AuthorizedUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-
 import static java.util.Objects.requireNonNull;
 
 public class SecurityUtil {

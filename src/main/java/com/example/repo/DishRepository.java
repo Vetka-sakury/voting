@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -16,15 +15,12 @@ public interface DishRepository extends JpaRepository<Dish, Integer> {
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM Meal m WHERE m.id=:id AND m.user.id=:userId")
-    int delete(@Param("id") int id, @Param("userId") int userId);
+    @Query("DELETE FROM Dish d WHERE d.restaurant.id=:restaurantId")
+    int deleteAllForRestaurant(@Param("restaurantId") int restaurantId);
 
-    @Query("SELECT m FROM Meal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC")
-    List<Dish> getAll(@Param("userId") int userId);
+    @Transactional
+    Dish save(Dish dish);
 
-    @Query("SELECT m from Meal m WHERE m.user.id=:userId AND m.dateTime >= :startDate AND m.dateTime < :endDate ORDER BY m.dateTime DESC")
-    List<Meal> getBetweenHalfOpen(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, @Param("userId") int userId);
-
-    @Query("SELECT m FROM Meal m JOIN FETCH m.user WHERE m.id = ?1 and m.user.id = ?2")
-    Meal getWithUser(int id, int userId);
+    @Query("SELECT d FROM Dish d WHERE d.restaurant.id=:restaurantId")
+    List<Dish> getAllByRestaurant(@Param("restaurantId") int restaurantId);
 }

@@ -1,36 +1,46 @@
 package com.example.service;
 
 import com.example.entity.Restaurant;
-import com.example.entity.User;
-import com.example.repo.RestaurantRepo;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.example.repo.RestaurantRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
 @Service
 public class RestaurantService {
 
-    private final RestaurantRepo repo;
+    private final RestaurantRepository repo;
 
-    public RestaurantService(RestaurantRepo repo) {
+    public RestaurantService(RestaurantRepository repo) {
         this.repo = repo;
     }
 
-    public boolean saveMenu(Restaurant menu) throws JsonProcessingException {
-        return repo.insertOrUpdateRestaurant(menu);
+    @CacheEvict(value = "restaurant", allEntries = true)
+    public Restaurant create(Restaurant restaurant) {
+        return repo.save(restaurant);
     }
 
-    public boolean deleteMenu(int id){
-        return repo.deleteMenu(id);
+    @CacheEvict(value = "restaurant", allEntries = true)
+    public void delete(int id) {
+        repo.deleteById(id);
     }
 
-    void vote(Restaurant restaurant, User user) {
-
+    public Restaurant get(int id) {
+        return repo.findById(id).orElse(null);
     }
 
-    public List<Restaurant> getMenues(){
-        return repo.getAll();
+    @Cacheable("restaurant")
+    public List<Restaurant> getAll() {
+        return repo.findAll();
+    }
+
+    @CacheEvict(value = "restaurant", allEntries = true)
+    public void update(Restaurant restaurant) {
+        Assert.notNull(restaurant, "restaurant must not be null");
+        repo.save(restaurant);
     }
 
     Restaurant getWinner() {

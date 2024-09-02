@@ -1,13 +1,11 @@
 package com.example.repo;
 
 import com.example.entity.User;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 
 @Transactional(readOnly = true)
@@ -24,6 +22,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.roles WHERE u.email=:email")
     User getByEmail(@Param("email") String email);
 
-    @Override
-    Optional<User> findById(Integer integer);
 }

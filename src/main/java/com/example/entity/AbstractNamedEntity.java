@@ -1,7 +1,6 @@
 package com.example.entity;
 
 
-import com.example.util.validation.NoHtml;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotBlank;

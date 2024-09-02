@@ -7,8 +7,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
@@ -19,7 +17,7 @@ import java.util.*;
 
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
 public class User extends AbstractNamedEntity implements HasIdAndEmail {
 
     @Column(name = "email", nullable = false, unique = true)
@@ -31,11 +29,10 @@ public class User extends AbstractNamedEntity implements HasIdAndEmail {
     @Column(name = "password", nullable = false)
     @NotBlank
     @Size(min = 5, max = 128)
-    // https://stackoverflow.com/a/12505165/548473
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
+    @Column(name = "enabled", nullable = false, columnDefinition = "boolean default true")
     private boolean enabled = true;
 
     @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
@@ -48,10 +45,7 @@ public class User extends AbstractNamedEntity implements HasIdAndEmail {
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role"}, name = "uk_user_role")})
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
-    //    @Fetch(FetchMode.SUBSELECT)
     @BatchSize(size = 200)
-    @JoinColumn
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Role> roles;
 
     public User() {

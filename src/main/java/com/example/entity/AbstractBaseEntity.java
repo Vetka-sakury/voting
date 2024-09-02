@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import org.hibernate.Hibernate;
 
 
-
 @MappedSuperclass
 // http://stackoverflow.com/questions/594597/hibernate-annotations-which-is-better-field-or-property-access
 @Access(AccessType.FIELD)

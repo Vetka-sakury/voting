@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 @Entity
 //todo index
-@Table(name = "dish", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "date_time"}, name = "meal_unique_user_datetime_idx")})
+@Table(name = "vote")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
