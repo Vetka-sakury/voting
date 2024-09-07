@@ -50,9 +50,13 @@ public class VoteService {
         return repository.save(vote);
     }
 
-    public List<Vote> getByUserForDate(int userId, LocalDateTime date){
+    public List<Vote> getByUserForDate(int userId, LocalDateTime date) {
         LocalDateTime startOfDate = date.with(LocalTime.MIN);
         return repository.getByUserForDate(userId, startOfDate, date);
     }
 
+    public List<Vote> getResult(LocalDateTime date) {
+        LocalDateTime startOfDate = date.with(LocalTime.MIN);
+        return repository.getResult(startOfDate, date);
+    }
 }

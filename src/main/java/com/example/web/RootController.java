@@ -12,12 +12,6 @@ import springfox.documentation.annotations.ApiIgnore;
 public class RootController {
     private static final Logger log = LoggerFactory.getLogger(RootController.class);
 
-    @GetMapping("/")
-    public String root() {
-        log.info("root");
-        return "redirect:meals";
-    }
-
     //    @Secured("ROLE_ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/users")
@@ -30,11 +24,5 @@ public class RootController {
     public String login() {
         log.info("login");
         return "login";
-    }
-
-    @GetMapping("/meals")
-    public String getMeals() {
-        log.info("meals");
-        return "meals";
     }
 }

@@ -19,6 +19,9 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     List<Vote> getAllByDate(@Param("date") LocalDateTime date);
 
     @Query("SELECT v FROM Vote v WHERE v.user = :userId AND v.created >= :startOfDate AND v.created <= :date")
-    List<Vote> getByUserForDate(@Param("userId") int userId, @Param("startOfDay")LocalDateTime startOfDate,  @Param("date")LocalDateTime date);
+    List<Vote> getByUserForDate(@Param("userId") int userId, @Param("startOfDate")LocalDateTime startOfDate,  @Param("date")LocalDateTime date);
+
+    @Query("SELECT count(v) FROM Vote v WHERE v.created >= :startOfDate AND v.created <= :date GROUP BY v.restaurant")
+    List<Vote> getResult(@Param("startOfDate")LocalDateTime startOfDate,  @Param("date")LocalDateTime date);
 }
 

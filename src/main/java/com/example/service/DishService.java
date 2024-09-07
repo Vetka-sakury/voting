@@ -7,7 +7,11 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -37,7 +41,6 @@ public class DishService {
         return repository.findById(id).orElse(null);
     }
 
-    @Cacheable("dish")
     public List<Dish> getAll() {
         return repository.findAll();
     }
@@ -54,4 +57,9 @@ public class DishService {
         repository.save(dish);
     }
 
+    @Cacheable("dish")
+    public List<Dish> getAllRestaurantMenuForDay(LocalDateTime date) {
+        LocalDateTime startOfDate = date.with(LocalTime.MIN);
+        return repository.getAllRestaurantMenuForDay(startOfDate, date);
+    }
 }

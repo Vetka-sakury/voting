@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.example.util.validation.ValidationUtil.checkNew;
 
@@ -46,6 +48,7 @@ public class DishController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Dish> create(@RequestBody Dish dish, @PathVariable("restaurant_id") int restaurantId) {
         checkNew(dish);
         Dish created = service.create(dish, restaurantId);
@@ -54,5 +57,10 @@ public class DishController {
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
+    }
+
+    @GetMapping("/{date}")
+    public List<Dish> getAllRestaurantMenuForDay(@PathVariable LocalDateTime date) {
+        return service.getAllRestaurantMenuForDay(date);
     }
 }

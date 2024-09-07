@@ -37,21 +37,18 @@ public class VoteController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void delete(@PathVariable int id) {
         service.delete(id);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
     public Vote update(@RequestBody Vote vote) {
         int userId = SecurityUtil.authUserId();
         return service.update(vote, userId);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Vote> create(@RequestBody Vote vote, @PathVariable("restaurant_id") int restaurantId) { //todo check
         int userId = SecurityUtil.authUserId();
         checkNew(vote);
@@ -60,16 +57,6 @@ public class VoteController {
         LocalTime currentTime = now.toLocalTime();
         List<Vote> votes = service.getByUserForDate(userId, now);
 
-//        if (!votes.isEmpty() && currentTime.isAfter(LocalTime.of(11, 0))) {
-//            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
-//        } else {
-//            Vote created = service.create(vote, userId);
-//
-//            URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-//                    .path(REST_URL + "/{id}")
-//                    .buildAndExpand(created.getId()).toUri();
-//            return ResponseEntity.created(uriOfNewResource).body(created);
-//        }
         Vote created;
         if (!votes.isEmpty()) {
             if (currentTime.isAfter(LocalTime.of(11, 0))) {
@@ -84,5 +71,10 @@ public class VoteController {
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
+    }
+
+    @GetMapping("/{date}")
+    public List<Vote> getResult(@PathVariable LocalDateTime date) {
+        return service.getResult(date);
     }
 }

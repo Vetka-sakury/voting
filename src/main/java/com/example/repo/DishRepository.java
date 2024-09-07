@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -23,4 +24,7 @@ public interface DishRepository extends JpaRepository<Dish, Integer> {
 
     @Query("SELECT d FROM Dish d WHERE d.restaurant.id=:restaurantId")
     List<Dish> getAllByRestaurant(@Param("restaurantId") int restaurantId);
+
+    @Query("SELECT d FROM Dish d WHERE d.created >= :startOfDate AND d.created <= :date ORDER BY d.restaurant.id")
+    List<Dish> getAllRestaurantMenuForDay(@Param("startOfDate")LocalDateTime startOfDate,  @Param("date")LocalDateTime date);
 }

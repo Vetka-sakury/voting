@@ -6,7 +6,7 @@ DELETE FROM restaurant;
 ALTER SEQUENCE global_seq RESTART WITH 100000;
 
 INSERT INTO users (name, email, password)
-VALUES ('User', 'user@yandex.ru', '{noop}password'),
+VALUES ('User', 'user@yandex.ru', 'password'),
        ('Admin', 'admin@gmail.com', '{noop}admin'),
        ('Guest', 'guest@gmail.com', '{noop}guest');
 
