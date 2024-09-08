@@ -68,13 +68,13 @@ public class DatabaseInitializer implements CommandLineRunner {
         voteRepository.save(vote2);
 
         Vote vote3 = new Vote(100010);
-        vote3.setCreated(convertDate("2024-08-29 10:00:00"));
+        vote3.setCreated(convertDate("2024-08-30 10:00:00"));
         vote3.setRestaurant(restaurantRepository.getReferenceById(100002));
         vote3.setUser(userRepository.getReferenceById(100001));
         voteRepository.save(vote3);
 
         Vote vote4 = new Vote(100011);
-        vote4.setCreated(convertDate("2024-08-29 10:00:00"));
+        vote4.setCreated(convertDate("2024-08-30 10:00:00"));
         vote4.setRestaurant(restaurantRepository.getReferenceById(100003));
         vote4.setUser(userRepository.getReferenceById(100001));
         voteRepository.save(vote4);

@@ -45,16 +45,6 @@ public class VoteController {
         voteRepository.delete(vote);
     }
 
-//    @PutMapping(value = "/restaurants/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-////    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public Vote update(@AuthenticationPrincipal AuthUser authUser, @Valid @RequestBody Vote vote, @PathVariable int id) {
-//        int userId = authUser.id();
-//        log.info("update {} for user {}", vote, userId);
-//        assureIdConsistent(vote, id);
-//        voteRepository.getBelonged(userId, id);
-//        return service.save(userId, vote);
-//    }
-
     @PostMapping(value = "/restaurants/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Vote> create(@AuthenticationPrincipal AuthUser authUser, @PathVariable("restaurant_id") int restaurantId) {
         int userId = authUser.id();
@@ -80,9 +70,4 @@ public class VoteController {
                 .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
-
-//    @GetMapping("/{date}")
-//    public List<Vote> getResult(@PathVariable LocalDateTime date) {
-//        return service.getResult(date);
-//    }
 }

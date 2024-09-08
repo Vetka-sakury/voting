@@ -36,14 +36,6 @@ public class VoteService {
         return repository.get(userId, id);
     }
 
-    public List<Vote> getAll() {
-        return repository.findAll();
-    }
-
-    public List<Vote> getAllByDate(LocalDateTime date) {
-        return repository.getAllByDate(date);
-    }
-
     public Vote save(Vote vote, int restaurantId) {
         Assert.notNull(vote, "vote must not be null");
         vote.setRestaurant(restaurantRepository.getReferenceById(restaurantId));
@@ -53,10 +45,5 @@ public class VoteService {
     public List<Vote> getByUserForDate(int userId, LocalDateTime date) {
         LocalDateTime startOfDate = date.with(LocalTime.MIN);
         return repository.getByUserForDate(userId, startOfDate, date);
-    }
-
-    public List<Vote> getResult(LocalDateTime date) {
-        LocalDateTime startOfDate = date.with(LocalTime.MIN);
-        return repository.getResult(startOfDate, date);
     }
 }

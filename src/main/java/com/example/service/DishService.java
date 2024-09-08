@@ -8,8 +8,9 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -23,14 +24,14 @@ public class DishService {
         this.restaurantRepository = restaurantRepository;
     }
 
-    @CacheEvict(value = "dish", allEntries = true)
+    @CacheEvict(value = {"dishesForDateByRestaurant", "restaurantsForDate"}, allEntries = true)
     public Dish create(Dish dish, int restaurantId) {
         Assert.notNull(dish, "dish must not be null");
         dish.setRestaurant(restaurantRepository.getReferenceById(restaurantId));
         return repository.save(dish);
     }
 
-    @CacheEvict(value = "dish", allEntries = true)
+    @CacheEvict(value = {"dishesForDateByRestaurant", "restaurantsForDate"}, allEntries = true)
     public void delete(int id) {
         repository.deleteById(id);
     }
@@ -43,21 +44,19 @@ public class DishService {
         return repository.findAll();
     }
 
-    @Cacheable("dishByRestaurant")//todo check
-    public List<Dish> getAllByRestaurant(int restaurantId) {
-        return repository.getAllByRestaurant(restaurantId);
-    }
-
-    @CacheEvict(value = "dish", allEntries = true)
+    @CacheEvict(value = {"dishesForDateByRestaurant", "restaurantsForDate"}, allEntries = true)
     public void update(Dish dish, int restaurantId) {
         Assert.notNull(dish, "dish must not be null");
         dish.setRestaurant(restaurantRepository.getReferenceById(restaurantId));
         repository.save(dish);
     }
 
-    @Cacheable("dish")
-    public List<Dish> getAllRestaurantMenuForDay(LocalDateTime date) {
-        LocalDateTime startOfDate = date.with(LocalTime.MIN);
-        return repository.getAllRestaurantMenuForDay(startOfDate, date);
+    @Cacheable("dishesForDateByRestaurant")
+    public List<Dish> getRestaurantMenuForDay(int restaurantId, String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(date, formatter);
+        LocalDateTime startDate = localDate.atStartOfDay();
+        LocalDateTime nextDate = startDate.plusDays(1);
+        return repository.getRestaurantMenuForDay(restaurantId, startDate, nextDate);
     }
 }

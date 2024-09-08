@@ -13,7 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
+import static com.example.util.validation.ValidationUtil.assureIdConsistent;
 import static com.example.util.validation.ValidationUtil.checkNew;
 
 @RestController
@@ -22,33 +27,31 @@ import static com.example.util.validation.ValidationUtil.checkNew;
 public class DishController {
 
     private final DishService dishService;
-    static final String REST_URL = "/api/dishes";
+    static final String REST_URL = "/api";
 
     public DishController(DishService service) {
         this.dishService = service;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/dishes/{id}")
     public ResponseEntity<Dish> get(@PathVariable int id) {
         return ResponseEntity.ok(dishService.get(id));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/dishes/admin/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void delete(@PathVariable int id) {
         dishService.delete(id);
     }
 
-    @PutMapping(value = "/restaurant/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/restaurant/{restaurant_id}/dishes/admin/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void update(@RequestBody Dish dish, @PathVariable("restaurant_id") int restaurantId) {
+    public void update(@RequestBody Dish dish, @PathVariable("restaurant_id") int restaurantId, @PathVariable("id") int dishId) {
+        assureIdConsistent(dish, dishId);
         dishService.update(dish, restaurantId);
     }
 
-    @PostMapping(value = "/restaurant/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping(value = "/restaurant/{restaurant_id}/dishes/admin", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Dish> create(@RequestBody DishTo dishTo, @PathVariable("restaurant_id") int restaurantId) {
         checkNew(dishTo);
         Dish created = dishService.create(DishUtil.createNewFromTo(dishTo), restaurantId);
@@ -59,8 +62,13 @@ public class DishController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-//    @GetMapping("/{date}")
-//    public List<Dish> getAllRestaurantMenuForDay(@PathVariable LocalDateTime date) {
-//        return service.getAllRestaurantMenuForDay(date);
-//    }
+    @GetMapping("/restaurant/{restaurant_id}/dishes/{date}")
+    public List<Dish> getRestaurantMenuForDay(@PathVariable("restaurant_id") int restaurantId, @PathVariable("date") String date) {
+        return dishService.getRestaurantMenuForDay(restaurantId, date);
+    }
+
+    @GetMapping("/dishes/admin")
+    public List<Dish> getAllDishes() {
+        return dishService.getAll();
+    }
 }
