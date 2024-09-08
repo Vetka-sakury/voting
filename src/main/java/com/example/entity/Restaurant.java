@@ -36,4 +36,15 @@ public class Restaurant extends AbstractNamedEntity {
     @OnDelete(action = OnDeleteAction.CASCADE) //https://stackoverflow.com/a/44988100/548473
     @ApiModelProperty(hidden = true)
     private List<Vote> votes;
+
+    public Restaurant(Integer id, String name, List<Dish> dishes, List<Vote> votes) {
+        this(id, name, LocalDateTime.now(), dishes, votes);
+    }
+
+    public Restaurant(Integer id, String name, LocalDateTime created, List<Dish> dishes, List<Vote> votes) {
+        super(id, name);
+        this.created = created;
+        this.dishes = dishes;
+        this.votes = votes;
+    }
 }

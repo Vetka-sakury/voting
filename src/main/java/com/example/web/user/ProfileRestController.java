@@ -1,38 +1,48 @@
 package com.example.web.user;
 
-import com.example.AuthorizedUser;
+import com.example.auth.AuthUser;
 import com.example.entity.User;
 import com.example.to.UserTo;
+import com.example.util.UsersUtil;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.net.URI;
 
+import static com.example.util.validation.ValidationUtil.assureIdConsistent;
+import static com.example.util.validation.ValidationUtil.checkNew;
+
 @RestController
 @RequestMapping(value = ProfileRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@Slf4j
 public class ProfileRestController extends AbstractUserController {
-    static final String REST_URL = "/rest/profile";
+    static final String REST_URL = "/api/profile";
 
     @GetMapping
-    public User get(@AuthenticationPrincipal @ApiIgnore AuthorizedUser authUser) {
-        return super.get(authUser.getId());
+    public User get(@AuthenticationPrincipal AuthUser authUser) {
+        log.info("get {}", authUser);
+        return authUser.getUser();
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@AuthenticationPrincipal @ApiIgnore AuthorizedUser authUser) {
-        super.delete(authUser.getId());
+    public void delete(@AuthenticationPrincipal AuthUser authUser) {
+        super.delete(authUser.id());
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<User> register(@RequestBody UserTo userTo) {
-        User created = super.create(userTo);
+    public ResponseEntity<User> register(@Valid @RequestBody UserTo userTo) {
+        log.info("register {}", userTo);
+        checkNew(userTo);
+        User created = repository.prepareAndSave(UsersUtil.createNewFromTo(userTo));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL).build().toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
@@ -40,13 +50,11 @@ public class ProfileRestController extends AbstractUserController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody UserTo userTo, @ApiIgnore @AuthenticationPrincipal AuthorizedUser authUser) {
-        super.update(userTo, authUser.getId());
+    @Transactional
+    public void update(@RequestBody @Valid UserTo userTo, @AuthenticationPrincipal AuthUser authUser) {
+        log.info("update {} with id={}", userTo, authUser.id());
+        assureIdConsistent(userTo, authUser.id());
+        User user = authUser.getUser();
+        repository.prepareAndSave(UsersUtil.updateFromTo(user, userTo));
     }
-
-    @GetMapping("/text")
-    public String testUTF() {
-        return "Русский текст";
-    }
-
 }

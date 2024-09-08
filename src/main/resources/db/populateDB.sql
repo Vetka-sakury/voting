@@ -1,12 +1,17 @@
-DELETE FROM user_role;
-DELETE FROM users;
-DELETE FROM vote;
-DELETE FROM dish;
-DELETE FROM restaurant;
+DELETE
+FROM user_role;
+DELETE
+FROM users;
+DELETE
+FROM vote;
+DELETE
+FROM dish;
+DELETE
+FROM restaurant;
 ALTER SEQUENCE global_seq RESTART WITH 100000;
 
 INSERT INTO users (name, email, password)
-VALUES ('User', 'user@yandex.ru', 'password'),
+VALUES ('User', 'user@yandex.ru', '{noop}password'),
        ('Admin', 'admin@gmail.com', '{noop}admin'),
        ('Guest', 'guest@gmail.com', '{noop}guest');
 

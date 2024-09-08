@@ -3,26 +3,20 @@ package com.example.util.exception;
 import org.springframework.http.HttpStatus;
 
 public enum ErrorType {
-    APP_ERROR("error.appError", HttpStatus.INTERNAL_SERVER_ERROR),
-    //  http://stackoverflow.com/a/22358422/548473
-    DATA_NOT_FOUND("error.dataNotFound", HttpStatus.UNPROCESSABLE_ENTITY),
-    DATA_ERROR("error.dataError", HttpStatus.CONFLICT),
-    VALIDATION_ERROR("error.validationError", HttpStatus.UNPROCESSABLE_ENTITY),
-    WRONG_REQUEST("error.wrongRequest", HttpStatus.BAD_REQUEST);
+    APP_ERROR("Application error", HttpStatus.INTERNAL_SERVER_ERROR),
+    BAD_DATA("Wrong data", HttpStatus.UNPROCESSABLE_ENTITY),
+    BAD_REQUEST("Bad request", HttpStatus.UNPROCESSABLE_ENTITY),
+    DATA_CONFLICT("DataBase conflict", HttpStatus.CONFLICT),
+    NOT_FOUND("Resource not found", HttpStatus.NOT_FOUND),
+    AUTH_ERROR("Authorization error", HttpStatus.FORBIDDEN),
+    UNAUTHORIZED("Request unauthorized", HttpStatus.UNAUTHORIZED),
+    FORBIDDEN("Request forbidden", HttpStatus.FORBIDDEN);
 
-    private final String errorCode;
-    private final HttpStatus status;
-
-    ErrorType(String errorCode, HttpStatus status) {
-        this.errorCode = errorCode;
+    ErrorType(String title, HttpStatus status) {
+        this.title = title;
         this.status = status;
     }
 
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public HttpStatus getStatus() {
-        return status;
-    }
+    public final String title;
+    public final HttpStatus status;
 }

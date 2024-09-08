@@ -12,7 +12,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 //todo index
@@ -25,7 +24,7 @@ public class Dish extends AbstractNamedEntity {
     @Column(name = "created", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
     @NotNull
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Date created;
+    private LocalDateTime created;
 
     @Column(name = "price", nullable = false)
     private double price;
@@ -36,4 +35,19 @@ public class Dish extends AbstractNamedEntity {
     @JsonIgnore
     @NotNull
     private Restaurant restaurant;
+
+    public Dish(Integer id, String name, double price) {
+        this(id, name, LocalDateTime.now(), price, null);
+    }
+
+    public Dish(Integer id, String name, double price, Restaurant restaurant) {
+        this(id, name, LocalDateTime.now(), price, restaurant);
+    }
+
+    public Dish(Integer id, String name, LocalDateTime created, double price, Restaurant restaurant) {
+        super(id, name);
+        this.created = created;
+        this.price = price;
+        this.restaurant = restaurant;
+    }
 }

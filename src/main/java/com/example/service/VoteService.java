@@ -1,39 +1,39 @@
 package com.example.service;
 
 import com.example.entity.Vote;
+import com.example.repo.RestaurantRepository;
 import com.example.repo.UserRepository;
 import com.example.repo.VoteRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VoteService {
 
     private final VoteRepository repository;
     private final UserRepository userRepository;
+    private final RestaurantRepository restaurantRepository;
 
-    public VoteService(VoteRepository repository, UserRepository userRepository) {
+    public VoteService(VoteRepository repository, UserRepository userRepository, RestaurantRepository restaurantRepository) {
         this.repository = repository;
         this.userRepository = userRepository;
+        this.restaurantRepository = restaurantRepository;
     }
 
-    public Vote create(Vote vote, int userId) {
-        Assert.notNull(vote, "vote must not be null");
+    public Vote create(int userId, int restaurantId) {
+        Vote vote = new Vote(null);
         vote.setUser(userRepository.getReferenceById(userId));
+        vote.setRestaurant(restaurantRepository.getReferenceById(restaurantId));
         return repository.save(vote);
     }
 
-    public void delete(int id) {
-        repository.deleteById(id);
-    }
-
-    public Vote get(int id) {
-        return repository.findById(id).orElse(null);
+    public Optional<Vote> get(int userId, int id) {
+        return repository.get(userId, id);
     }
 
     public List<Vote> getAll() {
@@ -44,9 +44,9 @@ public class VoteService {
         return repository.getAllByDate(date);
     }
 
-    public Vote update(Vote vote, int userId) {
+    public Vote save(Vote vote, int restaurantId) {
         Assert.notNull(vote, "vote must not be null");
-        vote.setUser(userRepository.getReferenceById(userId));
+        vote.setRestaurant(restaurantRepository.getReferenceById(restaurantId));
         return repository.save(vote);
     }
 

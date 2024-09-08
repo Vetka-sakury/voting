@@ -1,6 +1,6 @@
 package com.example.to;
 
-import com.example.HasId;
+import com.example.entity.HasId;
 import io.swagger.annotations.ApiModelProperty;
 
 

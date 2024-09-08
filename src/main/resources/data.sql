@@ -55,5 +55,28 @@ CREATE TABLE vote
     FOREIGN KEY (restaurant_id) REFERENCES RESTAURANT (id) ON DELETE CASCADE
 );
 CREATE INDEX restaurant_vote_id_created_idx
-    ON VOTE (restaurant_id, created)
---     todo
+    ON VOTE (restaurant_id, created);
+
+INSERT INTO users (name, email, password)
+VALUES ('Admin', 'admin@gmail.com', '{noop}admin'),
+       ('User', 'user@yandex.ru', '{noop}password');
+
+INSERT INTO user_role (role, user_id)
+VALUES ('ADMIN', 100000),
+       ('USER', 100001);
+
+INSERT INTO restaurant (name)
+VALUES ('TanGen'),
+       ('Myata');
+
+INSERT INTO dish (created, name, price, restaurant_id)
+VALUES ('2024-08-30 10:00:00', 'Баклажаны в соусе', 500, 100002),
+       ('2024-08-30 10:00:00', 'Свинина Танцуй', 1000, 100002),
+       ('2024-08-30 10:00:00', 'Салат Цезарь', 100, 100003),
+       ('2024-08-29 10:00:00', 'Пюре с котлетой', 1000, 100003);
+
+INSERT INTO vote (created, user_id, restaurant_id)
+VALUES ('2024-08-29 10:00:00', 100000, 100003),
+       ('2024-08-30 10:00:00', 100000, 100002),
+       ('2024-08-29 10:00:00', 100001, 100003),
+       ('2024-08-30 10:00:00', 100001, 100002);

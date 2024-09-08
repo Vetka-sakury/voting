@@ -39,4 +39,13 @@ public class Vote extends AbstractBaseEntity {
     @JsonIgnore
     @NotNull
     private Restaurant restaurant;
+
+    public Vote(Integer id) {
+        this(id, LocalDateTime.now());
+    }
+
+    public Vote(Integer id, LocalDateTime created) {
+        super(id);
+        this.created = created;
+    }
 }

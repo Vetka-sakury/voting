@@ -1,13 +1,14 @@
 package com.example.web.vote;
 
+import com.example.auth.AuthUser;
 import com.example.entity.Vote;
+import com.example.repo.VoteRepository;
 import com.example.service.VoteService;
-import com.example.web.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -16,56 +17,63 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import static com.example.util.validation.ValidationUtil.checkNew;
-
 @RestController
 @RequestMapping(value = VoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class VoteController {
 
-    private final VoteService service;
-    static final String REST_URL = "/votes";
+    private final VoteService voteService;
+    private final VoteRepository voteRepository;
+    static final String REST_URL = "api/votes";
 
-    public VoteController(VoteService service) {
-        this.service = service;
+    public VoteController(VoteService service, VoteRepository voteRepository) {
+        this.voteService = service;
+        this.voteRepository = voteRepository;
     }
 
     @GetMapping("/{id}")
-    public Vote get(@PathVariable int id) {
-        return service.get(id);
+    public ResponseEntity<Vote> get(@AuthenticationPrincipal AuthUser authUser, @PathVariable int id) {
+        log.info("get vote {} for user {}", id, authUser.id());
+        return ResponseEntity.of(voteRepository.get(authUser.id(), id));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable int id) {
-        service.delete(id);
+    public void delete(@AuthenticationPrincipal AuthUser authUser, @PathVariable int id) {
+        log.info("delete {} for user {}", id, authUser.id());
+        Vote vote = voteRepository.getBelonged(authUser.id(), id);
+        voteRepository.delete(vote);
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Vote update(@RequestBody Vote vote) {
-        int userId = SecurityUtil.authUserId();
-        return service.update(vote, userId);
-    }
+//    @PutMapping(value = "/restaurants/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+////    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    public Vote update(@AuthenticationPrincipal AuthUser authUser, @Valid @RequestBody Vote vote, @PathVariable int id) {
+//        int userId = authUser.id();
+//        log.info("update {} for user {}", vote, userId);
+//        assureIdConsistent(vote, id);
+//        voteRepository.getBelonged(userId, id);
+//        return service.save(userId, vote);
+//    }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Vote> create(@RequestBody Vote vote, @PathVariable("restaurant_id") int restaurantId) { //todo check
-        int userId = SecurityUtil.authUserId();
-        checkNew(vote);
+    @PostMapping(value = "/restaurants/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Vote> create(@AuthenticationPrincipal AuthUser authUser, @PathVariable("restaurant_id") int restaurantId) {
+        int userId = authUser.id();
 
         LocalDateTime now = LocalDateTime.now();
         LocalTime currentTime = now.toLocalTime();
-        List<Vote> votes = service.getByUserForDate(userId, now);
+        List<Vote> votes = voteService.getByUserForDate(userId, now);
 
         Vote created;
         if (!votes.isEmpty()) {
             if (currentTime.isAfter(LocalTime.of(11, 0))) {
                 return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             } else {
-                created = update(votes.get(0));
+                created = voteService.save(votes.get(0), votes.get(0).id());
+                log.info("updated {} for user {}", created, userId);
             }
         } else {
-            created = service.create(vote, userId);
+            created = voteService.create(userId, restaurantId);
+            log.info("created {} for user {}", created, userId);
         }
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
@@ -73,8 +81,8 @@ public class VoteController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @GetMapping("/{date}")
-    public List<Vote> getResult(@PathVariable LocalDateTime date) {
-        return service.getResult(date);
-    }
+//    @GetMapping("/{date}")
+//    public List<Vote> getResult(@PathVariable LocalDateTime date) {
+//        return service.getResult(date);
+//    }
 }

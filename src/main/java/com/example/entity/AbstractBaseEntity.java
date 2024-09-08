@@ -1,6 +1,5 @@
 package com.example.entity;
 
-import com.example.HasId;
 import jakarta.persistence.*;
 import org.hibernate.Hibernate;
 
