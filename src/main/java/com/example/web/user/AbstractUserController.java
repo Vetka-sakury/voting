@@ -1,6 +1,6 @@
 package com.example.web.user;
 
-import com.example.entity.User;
+import com.example.model.User;
 import com.example.repo.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

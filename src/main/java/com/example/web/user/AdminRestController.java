@@ -1,6 +1,6 @@
 package com.example.web.user;
 
-import com.example.entity.User;
+import com.example.model.User;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;

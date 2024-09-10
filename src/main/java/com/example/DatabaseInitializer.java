@@ -1,9 +1,9 @@
 package com.example;
 
-import com.example.entity.Dish;
-import com.example.entity.Restaurant;
-import com.example.entity.User;
-import com.example.entity.Vote;
+import com.example.model.Dish;
+import com.example.model.Restaurant;
+import com.example.model.User;
+import com.example.model.Vote;
 import com.example.repo.DishRepository;
 import com.example.repo.RestaurantRepository;
 import com.example.repo.UserRepository;
@@ -16,8 +16,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.example.entity.Role.ADMIN;
-import static com.example.entity.Role.USER;
+import static com.example.model.Role.ADMIN;
+import static com.example.model.Role.USER;
 
 @Component
 public class DatabaseInitializer implements CommandLineRunner {
@@ -56,13 +56,13 @@ public class DatabaseInitializer implements CommandLineRunner {
         restaurantRepository.save(restaurant2);
 
         Vote vote = new Vote(100008);
-        vote.setCreated(convertDate("2024-08-29 10:00:00"));
+        vote.setCreated(LocalDateTime.now());
         vote.setRestaurant(restaurantRepository.getReferenceById(100002));
         vote.setUser(userRepository.getReferenceById(100000));
         voteRepository.save(vote);
 
         Vote vote2 = new Vote(100009);
-        vote2.setCreated(convertDate("2024-08-29 10:00:00"));
+        vote2.setCreated(LocalDateTime.now().minusDays(1));
         vote2.setRestaurant(restaurantRepository.getReferenceById(100003));
         vote2.setUser(userRepository.getReferenceById(100000));
         voteRepository.save(vote2);

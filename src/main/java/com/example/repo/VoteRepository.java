@@ -1,6 +1,7 @@
 package com.example.repo;
 
-import com.example.entity.Vote;
+import com.example.model.User;
+import com.example.model.Vote;
 import com.example.util.exception.DataConflictException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,11 +15,12 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
 
+    @Override
     @Transactional
     Vote save(Vote vote);
 
-    @Query("SELECT v FROM Vote v WHERE v.user = :userId AND v.created >= :startOfDate AND v.created <= :date")
-    List<Vote> getByUserForDate(@Param("userId") int userId, @Param("startOfDate") LocalDateTime startOfDate, @Param("date") LocalDateTime date);
+    @Query("SELECT v FROM Vote v WHERE v.user = :user AND v.created >= :startOfDate AND v.created <= :date")
+    List<Vote> getByUserForDate(@Param("user") User user, @Param("startOfDate") LocalDateTime startOfDate, @Param("date") LocalDateTime date);
 
     @Query("SELECT v FROM Vote v WHERE v.id = :id and v.user.id = :userId")
     Optional<Vote> get(int userId, int id);

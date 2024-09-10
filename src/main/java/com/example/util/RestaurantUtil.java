@@ -1,6 +1,6 @@
 package com.example.util;
 
-import com.example.entity.Restaurant;
+import com.example.model.Restaurant;
 import com.example.to.RestaurantTo;
 import lombok.experimental.UtilityClass;
 

@@ -1,7 +1,7 @@
 package com.example.util;
 
-import com.example.entity.Role;
-import com.example.entity.User;
+import com.example.model.Role;
+import com.example.model.User;
 import com.example.to.UserTo;
 import lombok.experimental.UtilityClass;
 

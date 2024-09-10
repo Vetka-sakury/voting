@@ -1,6 +1,6 @@
 package com.example.web.restaurant;
 
-import com.example.entity.Restaurant;
+import com.example.model.Restaurant;
 import com.example.service.RestaurantService;
 import com.example.to.RestaurantTo;
 import com.example.util.RestaurantUtil;

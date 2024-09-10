@@ -1,6 +1,6 @@
 package com.example.web.dish;
 
-import com.example.entity.Dish;
+import com.example.model.Dish;
 import com.example.service.DishService;
 import com.example.to.DishTo;
 import com.example.util.DishUtil;
@@ -8,14 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static com.example.util.validation.ValidationUtil.assureIdConsistent;

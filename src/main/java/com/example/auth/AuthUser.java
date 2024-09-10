@@ -1,7 +1,7 @@
 package com.example.auth;
 
-import com.example.entity.Role;
-import com.example.entity.User;
+import com.example.model.Role;
+import com.example.model.User;
 import lombok.Getter;
 import org.springframework.lang.NonNull;
 

@@ -1,6 +1,6 @@
 package com.example.util.validation;
 
-import com.example.entity.HasId;
+import com.example.model.HasId;
 import com.example.util.exception.IllegalRequestDataException;
 import lombok.experimental.UtilityClass;
 

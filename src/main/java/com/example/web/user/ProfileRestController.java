@@ -1,7 +1,7 @@
 package com.example.web.user;
 
 import com.example.auth.AuthUser;
-import com.example.entity.User;
+import com.example.model.User;
 import com.example.to.UserTo;
 import com.example.util.UsersUtil;
 import jakarta.validation.Valid;

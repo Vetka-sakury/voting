@@ -1,11 +1,11 @@
 package com.example.to;
 
-import com.example.entity.HasId;
-import io.swagger.annotations.ApiModelProperty;
-
+import com.example.model.HasId;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public abstract class BaseTo implements HasId {
-    @ApiModelProperty(hidden = true)
+
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     protected Integer id;
 
     public BaseTo() {

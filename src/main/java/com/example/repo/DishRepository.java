@@ -1,9 +1,8 @@
 package com.example.repo;
 
-import com.example.entity.Dish;
-import com.example.entity.Restaurant;
+import com.example.model.Dish;
+import com.example.model.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;

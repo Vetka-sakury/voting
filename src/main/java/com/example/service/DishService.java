@@ -1,6 +1,6 @@
 package com.example.service;
 
-import com.example.entity.Dish;
+import com.example.model.Dish;
 import com.example.repo.DishRepository;
 import com.example.repo.RestaurantRepository;
 import org.springframework.cache.annotation.CacheEvict;

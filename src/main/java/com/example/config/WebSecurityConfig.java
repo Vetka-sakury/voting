@@ -1,8 +1,8 @@
 package com.example.config;
 
 import com.example.auth.AuthUser;
-import com.example.entity.Role;
-import com.example.entity.User;
+import com.example.model.Role;
+import com.example.model.User;
 import com.example.repo.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

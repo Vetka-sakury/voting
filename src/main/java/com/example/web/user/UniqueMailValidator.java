@@ -1,7 +1,7 @@
 package com.example.web.user;
 
 import com.example.auth.AuthUtil;
-import com.example.entity.HasIdAndEmail;
+import com.example.model.HasIdAndEmail;
 import com.example.repo.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;

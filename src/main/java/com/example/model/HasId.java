@@ -1,4 +1,4 @@
-package com.example.entity;
+package com.example.model;
 
 import org.springframework.util.Assert;
 

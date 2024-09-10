@@ -1,6 +1,6 @@
 package com.example.to;
 
-import com.example.entity.HasIdAndEmail;
+import com.example.model.HasIdAndEmail;
 import com.example.util.validation.NoHtml;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
