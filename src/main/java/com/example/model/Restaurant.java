@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-//todo index
 @Table(name = "restaurant")
 @Getter
 @Setter
@@ -27,13 +26,13 @@ public class Restaurant extends AbstractNamedEntity {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime created;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")//, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @OnDelete(action = OnDeleteAction.CASCADE) //https://stackoverflow.com/a/44988100/548473
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @Schema(hidden = true)
     private List<Dish> dishes;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")//, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @OnDelete(action = OnDeleteAction.CASCADE) //https://stackoverflow.com/a/44988100/548473
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @Schema(hidden = true)
     private List<Vote> votes;
 

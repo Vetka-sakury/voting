@@ -18,7 +18,6 @@ import static com.example.util.validation.ValidationUtil.checkNew;
 
 @RestController
 @RequestMapping(value = AdminRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-//@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminRestController extends AbstractUserController {
 
     static final String REST_URL = "/api/admin/users";

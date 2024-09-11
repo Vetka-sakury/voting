@@ -42,8 +42,6 @@ CREATE TABLE dish
     restaurant_id INTEGER                 NOT NULL,
     FOREIGN KEY (restaurant_id) REFERENCES RESTAURANT (id) ON DELETE CASCADE
 );
-CREATE INDEX restaurant_id_created_idx
-    ON DISH (restaurant_id, created);
 
 CREATE TABLE vote
 (
@@ -54,8 +52,6 @@ CREATE TABLE vote
     FOREIGN KEY (user_id) REFERENCES USERS (id) ON DELETE CASCADE,
     FOREIGN KEY (restaurant_id) REFERENCES RESTAURANT (id) ON DELETE CASCADE
 );
-CREATE INDEX restaurant_vote_id_created_idx
-    ON VOTE (restaurant_id, created);
 
 INSERT INTO users (name, email, password)
 VALUES ('Admin', 'admin@gmail.com', '{noop}admin'),

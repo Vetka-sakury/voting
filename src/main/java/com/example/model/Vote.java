@@ -14,7 +14,6 @@ import org.hibernate.annotations.OnDeleteAction;
 import java.time.LocalDateTime;
 
 @Entity
-//todo index
 @Table(name = "vote")
 @Getter
 @Setter
