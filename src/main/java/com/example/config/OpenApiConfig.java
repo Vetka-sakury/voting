@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
                         Spring Boot migration for <a href='https://javaops.ru/view/topjava'>TopJava application</a>
                         <p><b>Тестовые креденшелы:</b><br>
                         - user@yandex.ru / password<br>
-                        - admin@gmail.com / admin<br>
+                        - admin@yandex.ru / admin<br>
                         """,
                 contact = @Contact(name = "Alfiya Miftakhova", email = "alfiya_miftahova@yandex.ru")
         ),
